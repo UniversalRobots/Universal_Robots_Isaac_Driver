@@ -35,6 +35,10 @@
 #include "ur_robot_driver/primary/robot_message/version_message.h"
 #include "ur_robot_driver/rtde/rtde_writer.h"
 
+#ifdef BAZEL_BUILD
+#include <functional>
+#endif
+
 namespace ur_driver
 {
 /*!

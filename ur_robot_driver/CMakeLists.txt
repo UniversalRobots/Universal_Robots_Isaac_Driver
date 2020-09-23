@@ -1,59 +1,14 @@
 cmake_minimum_required(VERSION 2.8.12)
 project(ur_robot_driver)
 
-add_definitions( -DROS_BUILD )
+#add_definitions( -DROS_BUILD )
 
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
   message("${PROJECT_NAME}: You did not request a specific build type: selecting 'RelWithDebInfo'.")
   set(CMAKE_BUILD_TYPE RelWithDebInfo)
 endif()
 
-find_package(catkin REQUIRED
-  COMPONENTS
-    actionlib
-    control_msgs
-    controller_manager
-    geometry_msgs
-    hardware_interface
-    pluginlib
-    roscpp
-    sensor_msgs
-    std_srvs
-    tf
-    tf2_geometry_msgs
-    tf2_msgs
-    trajectory_msgs
-    ur_controllers
-    ur_dashboard_msgs
-    ur_msgs
-)
 find_package(Boost REQUIRED)
-
-catkin_package(
-  INCLUDE_DIRS
-    include
-  LIBRARIES
-    ur_robot_driver
-  CATKIN_DEPENDS
-    actionlib
-    control_msgs
-    controller_manager
-    geometry_msgs
-    hardware_interface
-    pluginlib
-    roscpp
-    sensor_msgs
-    tf
-    tf2_geometry_msgs
-    tf2_msgs
-    trajectory_msgs
-    ur_controllers
-    ur_dashboard_msgs
-    ur_msgs
-    std_srvs
-  DEPENDS
-    Boost
-)
 
 # check c++11 / c++0x
 include(CheckCXXCompilerFlag)
@@ -74,18 +29,12 @@ add_compile_options(-Wno-unused-parameter)
 
 include_directories(
   include
-  ${catkin_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
 )
 
 add_library(ur_robot_driver
     src/comm/tcp_socket.cpp
     src/comm/server.cpp
-    #src/ros/service_stopper.cpp
-    #src/ur/commander.cpp
-    #src/ur/master_board.cpp
-    #src/ur/messages.cpp
-    #src/ur/robot_mode.cpp
     src/primary/primary_package.cpp
     src/primary/robot_message.cpp
     src/primary/robot_message/version_message.cpp
@@ -106,56 +55,12 @@ add_library(ur_robot_driver
     src/ur/tool_communication.cpp
     src/rtde/rtde_writer.cpp
 )
-target_link_libraries(ur_robot_driver ${catkin_LIBRARIES})
-add_dependencies(ur_robot_driver ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+target_link_libraries(ur_robot_driver)
+#add_dependencies(ur_robot_driver ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
-add_library(ur_robot_driver_plugin
-  src/ros/dashboard_client_ros.cpp
-  src/ros/hardware_interface.cpp
-)
-target_link_libraries(ur_robot_driver_plugin ur_robot_driver ${catkin_LIBRARIES})
-add_dependencies(ur_robot_driver_plugin ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#install(TARGETS ur_robot_driver
+#  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+#  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+#)
 
-add_executable(ur_robot_driver_node
-  src/ros/dashboard_client_ros.cpp
-  src/ros/hardware_interface.cpp
-  src/ros/hardware_interface_node.cpp
-)
-target_link_libraries(ur_robot_driver_node ${catkin_LIBRARIES} ur_robot_driver)
-add_dependencies(ur_robot_driver_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-add_executable(dashboard_client
-  src/ros/dashboard_client_ros.cpp
-  src/ros/dashboard_client_node.cpp
-)
-target_link_libraries(dashboard_client ${catkin_LIBRARIES} ur_robot_driver)
-add_dependencies(dashboard_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-add_executable(robot_state_helper
-  src/ros/robot_state_helper.cpp
-  src/ros/robot_state_helper_node.cpp
-)
-target_link_libraries(robot_state_helper ${catkin_LIBRARIES} ur_robot_driver)
-add_dependencies(robot_state_helper ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-
-install(TARGETS ur_robot_driver ur_robot_driver_node robot_state_helper
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
-install(PROGRAMS scripts/tool_communication
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-
-install(DIRECTORY config launch
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-
-
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  FILES_MATCHING PATTERN "*.h"
-)
-
-install(FILES hardware_interface_plugin.xml
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)

@@ -29,6 +29,7 @@
 #define UR_RTDE_DRIVER_CONTROL_PACKAGE_SETUP_INPUTS_H_INCLUDED
 
 #include "ur_robot_driver/rtde/rtde_package.h"
+#include <vector>
 
 namespace ur_driver
 {

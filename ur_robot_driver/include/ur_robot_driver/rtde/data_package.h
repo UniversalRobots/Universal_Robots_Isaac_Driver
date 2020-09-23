@@ -33,6 +33,7 @@
 #include "ur_robot_driver/types.h"
 #include "ur_robot_driver/rtde/rtde_package.h"
 #include <boost/variant.hpp>
+#include <vector>
 
 namespace ur_driver
 {

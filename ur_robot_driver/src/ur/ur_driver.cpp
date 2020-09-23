@@ -242,6 +242,7 @@ std::string UrDriver::readScriptFile(const std::string& filename)
 
   return content;
 }
+
 std::string UrDriver::readKeepalive()
 {
   if (reverse_interface_active_)
@@ -273,9 +274,17 @@ void UrDriver::checkCalibration(const std::string& checksum)
 
   while (!consumer.isChecked())
   {
+#ifdef BAZEL_BUILD
+    sleep(1);
+#else
     ros::Duration(1).sleep();
+#endif
   }
+#ifdef BAZEL_BUILD
+  LOG_INFO("Got calibration information from robot.");
+#else
   ROS_DEBUG_STREAM("Got calibration information from robot.");
+#endif
 }
 
 rtde_interface::RTDEWriter& UrDriver::getRTDEWriter()

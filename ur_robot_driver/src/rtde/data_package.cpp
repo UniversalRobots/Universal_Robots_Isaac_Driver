@@ -26,6 +26,11 @@
 //----------------------------------------------------------------------
 
 #include "ur_robot_driver/rtde/data_package.h"
+
+#ifdef BAZEL_BUILD
+#include <functional>
+#endif
+
 namespace ur_driver
 {
 namespace rtde_interface

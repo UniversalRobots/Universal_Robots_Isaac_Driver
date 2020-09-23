@@ -1,0 +1,16 @@
+Universal Robots Isaac Driver
+Copyright 2020 Universal Robots A/S
+
+All source code contained in and/or linked to in this message (the “Source Code”) is subject to the copyright of
+Universal Robots A/S and/or its licensors. THE SOURCE CODE IS PROVIDED “AS IS” WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING – BUT NOT LIMITED TO – WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR
+NONINFRINGEMENT. USE OF THE SOURCE CODE IS AT YOUR OWN RISK AND UNIVERSAL ROBOTS A/S AND ITS LICENSORS SHALL, TO THE
+MAXIMUM EXTENT PERMITTED BY LAW, NOT BE LIABLE FOR ANY ERRORS OR MALICIOUS CODE IN THE SOURCE CODE, ANY THIRD-PARTY
+CLAIMS, OR ANY OTHER CLAIMS AND DAMAGES, INCLUDING INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL OR PUNITIVE DAMAGES,
+OR ANY LOSS OF PROFITS, EXPECTED SAVINGS, OR REVENUES, WHETHER INCURRED DIRECTLY OR INDIRECTLY, OR ANY LOSS OF DATA,
+USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR USE OF THE SOURCE CODE. You may make copies of the
+Source Code for use in connection with a Universal Robots or UR+ product, provided that you include (i) an
+appropriate copyright notice (“©  [the year in which you received the Source Code or the Source Code was first
+published, e.g. “2020”] Universal Robots A/S and/or its licensors”) along with the capitalized section of this notice
+in all copies of the Source Code. By using the Source Code, you agree to the above terms. For more information,
+please contact legal@universal-robots.com.

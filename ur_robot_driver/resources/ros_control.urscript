@@ -32,12 +32,17 @@ def set_servo_setpoint(q):
   cmd_servo_q = q
 end
 
-def extrapolate():
+def extrapolateOld():
   diff = [cmd_servo_q[0] - cmd_servo_q_last[0], cmd_servo_q[1] - cmd_servo_q_last[1], cmd_servo_q[2] - cmd_servo_q_last[2], cmd_servo_q[3] - cmd_servo_q_last[3], cmd_servo_q[4] - cmd_servo_q_last[4], cmd_servo_q[5] - cmd_servo_q_last[5]]
   cmd_servo_q_last = cmd_servo_q
   cmd_servo_q = [cmd_servo_q[0] + diff[0], cmd_servo_q[1] + diff[1], cmd_servo_q[2] + diff[2], cmd_servo_q[3] + diff[3], cmd_servo_q[4] + diff[4], cmd_servo_q[5] + diff[5]]
 
   return cmd_servo_q
+end
+
+def extrapolate():
+  diff = [cmd_servo_q[0] - cmd_servo_q_last[0], cmd_servo_q[1] - cmd_servo_q_last[1], cmd_servo_q[2] - cmd_servo_q_last[2], cmd_servo_q[3] - cmd_servo_q_last[3], cmd_servo_q[4] - cmd_servo_q_last[4], cmd_servo_q[5] - cmd_servo_q_last[5]]
+  return [cmd_servo_q[0] + diff[0]*extrapolate_count, cmd_servo_q[1] + diff[1]*extrapolate_count, cmd_servo_q[2] + diff[2]*extrapolate_count, cmd_servo_q[3] + diff[3]*extrapolate_count, cmd_servo_q[4] + diff[4]*extrapolate_count, cmd_servo_q[5] + diff[5]*extrapolate_count]
 end
 
 thread servoThread():
@@ -62,10 +67,12 @@ thread servoThread():
       end
 
       q = extrapolate()
+      #textmsg("SERVO_EXTRA q: ", q)
       servoj(q, t=steptime, {{SERVO_J_REPLACE}})
 
     elif state == SERVO_RUNNING:
       extrapolate_count = 0
+      #textmsg("SERVO_RUNNING q: ", q)
       servoj(q, t=steptime, {{SERVO_J_REPLACE}})
     else:
       extrapolate_count = 0
@@ -73,7 +80,7 @@ thread servoThread():
     end
     exit_critical
   end
-  textmsg("servo thread ended")
+  textmsg("servo thread ended", control_mode)
   stopj(4.0)
 end
 
@@ -101,12 +108,14 @@ global keepalive = -2
 textmsg("External control active")
 params_mult = socket_read_binary_integer(1+6+1, "reverse_socket")
 keepalive = params_mult[1]
+keepalive = 10 #TODO removed
 while keepalive > 0 and control_mode > MODE_STOPPED:
   enter_critical
   socket_send_line(1, "reverse_socket")
   params_mult = socket_read_binary_integer(1+6+1, "reverse_socket", 0.02) # steptime could work as well, but does not work in simulation
   if params_mult[0] > 0:
     keepalive = params_mult[1]
+    keepalive = 10 #TODO removed
     if control_mode != params_mult[8]:
       control_mode = params_mult[8]
       join thread_move
@@ -127,6 +136,10 @@ while keepalive > 0 and control_mode > MODE_STOPPED:
     keepalive = keepalive - 1
   end
   exit_critical
+end
+
+if keepalive <= 0:
+  textmsg("Connection timeout")
 end
 
 textmsg("Stopping communication and control")

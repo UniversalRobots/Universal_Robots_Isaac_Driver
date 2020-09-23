@@ -31,6 +31,8 @@
 #include "ur_robot_driver/rtde/rtde_package.h"
 #include "ur_robot_driver/rtde/package_header.h"
 
+#include <vector>
+
 namespace ur_driver
 {
 namespace rtde_interface
