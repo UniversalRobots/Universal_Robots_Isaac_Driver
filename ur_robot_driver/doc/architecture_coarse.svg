@@ -205,7 +205,7 @@
       <rect x="502.8405" width="159.6866" height="21.4609" y="514.9464" clip-path="url(#clipPath2)" stroke="none"/>
     </g>
     <g font-size="15px" stroke-linecap="butt" transform="matrix(1,0,0,1,-258,-499)" text-rendering="geometricPrecision" font-family="sans-serif" shape-rendering="geometricPrecision" stroke-miterlimit="1.45">
-      <text x="577.2068" xml:space="preserve" y="530.8698" clip-path="url(#clipPath2)" stroke="none">ROS-Driver</text>
+      <text x="577.2068" xml:space="preserve" y="530.8698" clip-path="url(#clipPath2)" stroke="none">Isaac-Driver</text>
     </g>
     <g stroke-linecap="round" transform="matrix(1,0,0,1,-258,-499)" stroke-dashoffset="2" fill="rgb(102,102,153)" text-rendering="geometricPrecision" shape-rendering="geometricPrecision" stroke-dasharray="0,4" stroke="rgb(102,102,153)" stroke-miterlimit="1.45">
       <rect x="502.8405" y="514.9464" clip-path="url(#clipPath2)" fill="none" width="159.6866" rx="4" ry="4" height="433"/>
@@ -229,7 +229,7 @@
       <line stroke-linecap="butt" transform="matrix(1,0,0,1,-511.8405,-761.9464)" clip-path="url(#clipPath2)" fill="none" x1="519.8405" x2="646.8405" y1="795.9151" image-rendering="auto" y2="795.9151" stroke-miterlimit="1.45"/>
     </g>
     <g text-rendering="geometricPrecision" stroke-miterlimit="1.45" shape-rendering="geometricPrecision" font-family="sans-serif" transform="matrix(1,0,0,1,-258,-499)" stroke-linecap="butt">
-      <text x="550.569" xml:space="preserve" y="787.0851" clip-path="url(#clipPath2)" stroke="none">Controllers</text>
+      <text x="550.569" xml:space="preserve" y="787.0851" clip-path="url(#clipPath2)" stroke="none">URController</text>
       <text x="523.8405" xml:space="preserve" y="813.0538" clip-path="url(#clipPath2)" stroke="none">- speed_scaling</text>
       <text x="523.8405" xml:space="preserve" y="827.0226" clip-path="url(#clipPath2)" stroke="none">- tcp_force</text>
       <text x="523.8405" xml:space="preserve" y="840.9913" clip-path="url(#clipPath2)" stroke="none">- joint_states</text>

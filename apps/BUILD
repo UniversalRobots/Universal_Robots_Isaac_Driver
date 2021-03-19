@@ -1,10 +1,22 @@
-load("//engine/build:isaac.bzl", "isaac_jupyter_app", "isaac_py_app")
+load("//bzl:py.bzl", "isaac_jupyter_app", "isaac_py_app")
+load("//bzl:module.bzl", "isaac_subgraph")
+
+isaac_subgraph(
+    name = "shuffle_box_behavior_hardware_subgraph",
+    modules = [
+        "behavior_tree",
+        "composite",
+    ],
+    subgraph = "shuffle_box_behavior_hardware.subgraph.json",
+    visibility = ["//visibility:public"],
+)
 
 isaac_jupyter_app(
     name = "simple_joint_control",
     data = [
         "//apps/assets/kinematic_trees",
-        "//packages/planner/apps:multi_joint_lqr_control_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur_eseries_robot_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur_cb3_robot_subgraph",
     ],
     modules = [
         "sight",
@@ -19,8 +31,9 @@ isaac_py_app(
     srcs = ["shuffle_box_hardware.py"],
     data = [
         "//apps/assets/kinematic_trees",
-        "//apps/samples/manipulation:shuffle_box_behavior_subgraph",
-        "//packages/planner/apps:multi_joint_lqr_control_subgraph",
+        "//packages/universal_robots/apps:shuffle_box_behavior_hardware_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur_eseries_robot_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur_cb3_robot_subgraph",
     ],
     modules = [
         "behavior_tree",
@@ -29,6 +42,6 @@ isaac_py_app(
         "universal_robots",
     ],
     deps = [
-        "//engine/pyalice",
+        "//packages/pyalice",
     ],
 )

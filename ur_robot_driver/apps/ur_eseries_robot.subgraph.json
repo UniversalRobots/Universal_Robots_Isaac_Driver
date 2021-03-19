@@ -1,0 +1,243 @@
+{
+  "modules": [
+    "map",
+    "planner",
+    "lqr",
+    "//packages/universal_robots/ur_controller:ur_controller",
+    "//packages/universal_robots:universal_robots"
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "name": "subgraph",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "interface",
+            "type": "isaac::alice::Subgraph"
+          }
+        ]
+      },
+      {
+        "name": "universal_robots",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "UniversalRobots",
+            "type": "isaac::ur_driver::UniversalRobots"
+          }
+        ]
+      },
+      {
+        "name": "dashboard_client_isaac",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "DashboardClientIsaac",
+            "type": "isaac::ur_driver::DashboardClientIsaac"
+          }
+        ],
+        "disable_automatic_start": true
+      },
+      {
+        "start_order": -100,
+        "name": "kinematic_tree",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "KinematicTree",
+            "type": "isaac::map::KinematicTree"
+          }
+        ]
+      },
+      {
+        "name": "local_plan",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "MultiJointLqrPlanner",
+            "type": "isaac::lqr::MultiJointLqrPlanner"
+          },
+          {
+            "name": "MultiJointPlanner",
+            "type": "isaac::planner::MultiJointPlanner"
+          }
+        ]
+      },
+      {
+        "name": "controller",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "ScaledMultiJointController",
+            "type": "isaac::ur_controller::ScaledMultiJointController"
+          }
+        ]
+      }
+    ],
+    "edges": [    
+      {
+        "source": "universal_robots/UniversalRobots/arm_state",
+        "target": "local_plan/MultiJointPlanner/starting_state"
+      },
+      {
+        "source": "local_plan/MultiJointPlanner/plan",
+        "target": "controller/ScaledMultiJointController/plan"
+      },
+      {
+        "source": "controller/ScaledMultiJointController/joint_command",
+        "target": "universal_robots/UniversalRobots/arm_command"
+      },
+      {
+        "source": "universal_robots/UniversalRobots/arm_state",
+        "target": "controller/ScaledMultiJointController/current_arm_state"
+      },
+      {
+        "source": "universal_robots/UniversalRobots/trajectory",
+        "target": "controller/ScaledMultiJointController/plan"
+      },
+      {
+        "source": "subgraph/interface/joint_target",
+        "target": "local_plan/MultiJointPlanner/target_state"
+      },
+      {
+        "source": "controller/ScaledMultiJointController/trajectory_executed_succesfully",
+        "target": "subgraph/interface/trajectory_executed_succesfully"
+      },
+      {
+        "source": "subgraph/interface/dashboard_command",
+        "target": "dashboard_client_isaac/DashboardClientIsaac/dashboard_command"
+      },
+      {
+        "source": "dashboard_client_isaac/DashboardClientIsaac/dashboard_anwser",
+        "target": "subgraph/interface/dashboard_anwser"
+      },
+      {
+        "source": "subgraph/interface/resend_control_script",
+        "target": "universal_robots/UniversalRobots/resend_control_script"
+      },
+      {
+        "source": "subgraph/interface/stop_control",
+        "target": "universal_robots/UniversalRobots/stop_control"
+      },
+      {
+        "source": "subgraph/interface/set_speed_slider",
+        "target": "universal_robots/UniversalRobots/set_speed_slider"
+      },
+      {
+        "source": "subgraph/interface/io_command",
+        "target": "universal_robots/UniversalRobots/io_command"
+      },
+      {
+        "source": "universal_robots/UniversalRobots/io_state",
+        "target": "subgraph/interface/io_state"
+      },
+      {
+        "source": "universal_robots/UniversalRobots/arm_state",
+        "target": "subgraph/interface/arm_state"
+      },
+      {
+        "source": "universal_robots/UniversalRobots/robot_program_running",
+        "target": "subgraph/interface/robot_program_running"
+      }
+    ]
+  },
+  "config": {
+    "kinematic_tree": {
+      "KinematicTree": {
+        "kinematic_file": "apps/assets/kinematic_trees/ur10.kinematic.json"
+      }
+    },
+    "universal_robots": {
+      "UniversalRobots": {
+        "tick_period":  "500Hz",
+        "kinematic_tree": "$(fullname kinematic_tree)",
+        "controller": "$(fullname controller)",
+        "dashboard_client": "$(fullname dashboard_client_isaac)"
+      }
+    },
+    "local_plan":{
+      "MultiJointLqrPlanner": {
+        "speed_max": [1,1,1,1,1,1],
+        "speed_min": [-1,-1,-1,-1,-1,-1],
+        "acceleration_max": [1,1,1,1,1,1],
+        "acceleration_min": [-1,-1,-1,-1,-1,-1]
+      },
+      "MultiJointPlanner": {
+        "tick_period": "10Hz",
+        "kinematic_tree_node_name": "$(fullname kinematic_tree)",
+        "multi_joint_planner_node_name": "$(fullname local_plan)"
+      }
+    },
+    "controller": {
+      "ScaledMultiJointController": {
+        "goal_time": 0.6,
+        "tolerance": 0.1,
+        "tick_period":  "500Hz",
+        "kinematic_tree": "$(fullname kinematic_tree)",
+        "gains": {
+          "shoulder_pan_joint": {
+            "p": 5,
+            "i": 0.05,
+            "d": 0.1,
+            "i_clamp": 1,
+            "velocity_ff" : 1
+          },
+          "shoulder_lift_joint": {
+            "p": 5,
+            "i": 0.05,
+            "d": 0.1,
+            "i_clamp": 1,
+            "velocity_ff" : 1
+          },
+          "elbow_joint": {
+            "p": 5,
+            "i": 0.05,
+            "d": 0.1,
+            "i_clamp": 1,
+            "velocity_ff" : 1
+          },
+          "wrist_1_joint": {
+            "p": 5,
+            "i": 0.05,
+            "d": 0.1,
+            "i_clamp": 1,
+            "velocity_ff" : 1
+          },
+          "wrist_2_joint": {
+            "p": 5,
+            "i": 0.05,
+            "d": 0.01,
+            "i_clamp": 1,
+            "velocity_ff" : 1
+          },
+          "wrist_3_joint": {
+            "p": 5,
+            "i": 0.05,
+            "d": 0.1,
+            "i_clamp": 1,
+            "velocity_ff" : 1
+          }
+        }
+      }
+    }
+  }  
+}
