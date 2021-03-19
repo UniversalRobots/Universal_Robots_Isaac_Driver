@@ -7,3 +7,5 @@ install_manifest.txt
 .idea
 .directory
 .vscode
+__pycache__
+ur_client_library

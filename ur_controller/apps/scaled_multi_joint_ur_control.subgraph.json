@@ -1,0 +1,110 @@
+{
+  "modules": [
+    "map",
+    "lqr",
+    "planner",
+    "//packages/universal_robots/ur_controller:ur_controller"
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "name": "subgraph",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "interface",
+            "type": "isaac::alice::Subgraph"
+          }
+        ]
+      },
+      {
+        "start_order": -100,
+        "name": "kinematic_tree",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "KinematicTree",
+            "type": "isaac::map::KinematicTree"
+          }
+        ]
+      },
+      {
+        "name": "local_plan",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "MultiJointLqrPlanner",
+            "type": "isaac::lqr::MultiJointLqrPlanner"
+          },
+          {
+            "name": "MultiJointPlanner",
+            "type": "isaac::planner::MultiJointPlanner"
+          }
+        ]
+      },
+      {
+        "name": "controller",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "ScaledMultiJointController",
+            "type": "isaac::ur_controller::ScaledMultiJointController"
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "source": "subgraph/interface/joint_state",
+        "target": "local_plan/MultiJointPlanner/starting_state"
+      },
+      {
+        "source": "subgraph/interface/joint_target",
+        "target": "local_plan/MultiJointPlanner/target_state"
+      },
+      {
+        "source": "local_plan/MultiJointPlanner/plan",
+        "target": "controller/ScaledMultiJointController/plan"
+      },
+      {
+        "source": "controller/ScaledMultiJointController/joint_command",
+        "target": "subgraph/interface/joint_command"
+      },
+      {
+        "source": "subgraph/interface/joint_state",
+        "target": "controller/ScaledMultiJointController/current_arm_state"
+      },
+      {
+        "source": "subgraph/interface/trajectory_executed_succesfully",
+        "target": "controller/ScaledMultiJointController/trajectory_executed_succesfully"
+      }
+    ]
+  },
+  "config": {
+    "local_plan": {
+      "MultiJointPlanner": {
+        "tick_period": "10Hz",
+        "kinematic_tree_node_name": "$(fullname kinematic_tree)",
+        "multi_joint_planner_node_name": "$(fullname local_plan)"
+      }
+    },
+    "controller": {
+      "ScaledMultiJointController": {
+        "tick_period": "500Hz",
+        "kinematic_tree": "$(fullname kinematic_tree)"
+      }
+    }
+  }
+}
