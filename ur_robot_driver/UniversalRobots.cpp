@@ -126,15 +126,13 @@ void UniversalRobots::start()
   }
 
   // Set up driver
-  static const bool HEADLESS_MODE = get_headless_mode();
-  static const std::string CALIB_CHECKSUM = "";
   LOG_INFO("Initializing ur driver");
   try
   {
     ur_driver_.reset(new urcl::UrDriver(
         get_robot_ip(), get_control_script_program(), get_rtde_output_recipe(), get_rtde_input_recipe(),
-        std::bind(&UniversalRobots::handle_program_state, this, std::placeholders::_1), HEADLESS_MODE, NULL,
-        CALIB_CHECKSUM, 50001, 50002, get_servoj_gain(), get_servoj_lookahead_time(), false));
+        std::bind(&UniversalRobots::handle_program_state, this, std::placeholders::_1), get_headless_mode(),
+        std::unique_ptr<urcl::ToolCommSetup>{}, 50001, 50002, get_servoj_gain(), get_servoj_lookahead_time(), false));
   }
   catch (urcl::UrException& e)
   {
