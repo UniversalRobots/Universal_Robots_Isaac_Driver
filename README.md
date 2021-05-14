@@ -183,16 +183,6 @@ to stand in the `isaac/sdk` folder to launch the application.
 4. Follow [Nvidias guide](https://docs.nvidia.com/isaac/isaac/doc/tutorials/building_apps.html)
  to build your own applications.
 
-When running any of the applications above you will see the following error message
-in the terminal.
-
-```bash
-2021-04-29 13:07:32.825 ERROR packages/universal_robots/ur_client_library/src/ur/calibration_checker.cpp@50: "The calibration parameters of the connected robot don't match the ones from the given kinematics config file. Please be aware that this can lead to critical inaccuracies of tcp positions. Use the ur_calibration tool to extract the correct calibration from the robot and pass that into the description. See [https://github.com/UniversalRobots/Universal_Robots_ROS_Driver#extract-calibration-information] for details".
-```
-
-This error message should just be ignored as the calibration feature is not implemented
-in the Isaac driver. The driver works perfectly fine despite this error message.
-
 Once any of the applications are running you can start the robot program with loaded
 URCap. From that moment on the robot is fully functional. You can make use of the
 Pause function or even Stop the program. Simply press the Play button
