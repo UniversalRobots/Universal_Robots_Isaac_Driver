@@ -256,7 +256,6 @@ void UniversalRobots::stop()
   {
     node()->app()->backend()->node_backend()->stopNode(dashboard_client_);
   }
-  ur_driver_->stopControl();
   rtde_thread_running_ = false;
   rtde_main_loop_trd_.join();
   ur_driver_.reset();
