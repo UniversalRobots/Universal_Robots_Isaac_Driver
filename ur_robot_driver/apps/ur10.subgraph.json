@@ -93,7 +93,7 @@
         ]
       }
     ],
-    "edges": [    
+    "edges": [
       {
         "source": "universal_robots/UniversalRobots/arm_state",
         "target": "local_plan/MultiJointPlanner/starting_state"
@@ -131,10 +131,6 @@
         "target": "subgraph/interface/dashboard_anwser"
       },
       {
-        "source": "subgraph/interface/resend_control_script",
-        "target": "universal_robots/UniversalRobots/resend_control_script"
-      },
-      {
         "source": "subgraph/interface/stop_control",
         "target": "universal_robots/UniversalRobots/stop_control"
       },
@@ -145,6 +141,10 @@
       {
         "source": "subgraph/interface/io_command",
         "target": "universal_robots/UniversalRobots/io_command"
+      },
+      {
+        "source": "subgraph/interface/resend_control_script",
+        "target": "universal_robots/UniversalRobots/resend_control_script"
       },
       {
         "source": "universal_robots/UniversalRobots/io_state",
@@ -163,12 +163,12 @@
   "config": {
     "kinematic_tree": {
       "KinematicTree": {
-        "kinematic_file": "apps/assets/kinematic_trees/ur10.kinematic.json"
+        "kinematic_file": "packages/universal_robots/ur_robot_driver/config/ur10.kinematic.json"
       }
     },
     "universal_robots": {
       "UniversalRobots": {
-        "tick_period":  "500Hz",
+        "tick_period":  "125Hz",
         "kinematic_tree": "$(fullname kinematic_tree)",
         "controller": "$(fullname controller)",
         "dashboard_client": "$(fullname dashboard_client_isaac)"
@@ -191,7 +191,7 @@
       "ScaledMultiJointController": {
         "goal_time": 0.6,
         "tolerance": 0.1,
-        "tick_period":  "500Hz",
+        "tick_period":  "125Hz",
         "kinematic_tree": "$(fullname kinematic_tree)",
         "gains": {
           "shoulder_pan_joint": {
@@ -239,5 +239,5 @@
         }
       }
     }
-  }  
+  }
 }

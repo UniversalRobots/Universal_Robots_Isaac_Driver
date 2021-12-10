@@ -148,9 +148,9 @@ driver comes with two sample applications, that can be used to control an UR rob
 
 For more detailed documentation of launching the applications see the seperate [tutorial](ur_robot_driver/doc/sample_applications.md)
 
-1. The first [application](/apps/simple_joint_control.ipynb) can be run inside the
-Isaac SDK folder, with the following command. Remember that you have
-to stand in the `isaac/sdk` folder to launch the application.
+1. The application [simple joint control](/apps/simple_joint_control.ipynb) can
+be run inside the Isaac SDK folder, with the following command. Remember that you
+have to stand in the `isaac/sdk` folder to launch the application.
 
    ```bash
    $ bazel run packages/universal_robots/apps:simple_joint_control
@@ -158,34 +158,48 @@ to stand in the `isaac/sdk` folder to launch the application.
 
    This should open a jupyter notebook in your browser. Follow instructions
    there to manually control joints or digital io channels on the arm.
-   Remember to update the ip for the arm and robot generation.
+   Remember to update the ip for the arm and the robot model.
 
-2. The second [application](/apps/shuffle_box_hardware.py) repetitively moves between
-two preset waypoints. This app assumes a vacuum pump is connected through the digital
-io interfaces. Make sure to update the waypoints based on the
+2. The application [predefined waypoint movement](/apps/predefined_waypoint_movement.py)
+moves between some preset waypoints. Make sure to update the waypoints based on the
 actual setup, and make sure the path between the waypoints are obstacle-free. To
 run the application, see below. Remember that you have
 to stand in the `isaac/sdk` folder to launch the application.
 
    ```bash
-   $ bazel run packages/universal_robots/apps:shuffle_box_hardware -- --robot_ip "192.168.56.1" --generation "e-series" --headless_mode false
+   $ bazel run packages/universal_robots/apps:shuffle_box_hardware -- --robot_ip "192.168.56.1" --robot_model "ur5e" --headless_mode false
    ```
 
    For the parameter robot_ip insert the IP address on which the Isaac driver
-   can reach the robot. Update generation according to the robot generation
-   that you are using, generation is one of *e-series or cb3*. The last argument
-   can be used to enable [headless_mode](ur_robot_driver/README.md#headless-mode)
+   can reach the robot. Update robot_model according to the robot model
+   that you are using, robot model is one of *ur3, ur5, ur10, ur3e, ur5e, ur10e,
+   ur16e*. headless_mode can be used to enable [headless_mode](ur_robot_driver/README.md#headless-mode)
    or not.
 
-3. Both samples can be run on Jetson. Follow [instructions](https://docs.nvidia.com/isaac/isaac/doc/getting_started.html#deploying-and-running-on-jetson)
+3. The application [shuffle box hardware](/apps/shuffle_box_hardware.py) moves between
+some preset waypoints. This app assumes a vacuum pump is connected through the digital
+io interfaces and that the robot model is a UR10. Make sure to update the waypoints
+based on the actual setup, and make sure the path between the waypoints are obstacle-free.
+To run the application, see below. Remember that you have to stand in the `isaac/sdk`
+folder to launch the application.
+
+   ```bash
+   $ bazel run packages/universal_robots/apps:shuffle_box_hardware -- --robot_ip "192.168.56.1" --headless_mode false
+   ```
+
+   For the parameter robot_ip insert the IP address on which the Isaac driver
+   can reach the robot. headless_mode can be used to enable [headless_mode](ur_robot_driver/README.md#headless-mode)
+   or not.
+
+4. All samples can be run on Jetson. Follow [instructions](https://docs.nvidia.com/isaac/isaac/doc/getting_started.html#deploying-and-running-on-jetson)
  to deploy the sample apps.
 
-4. Follow [Nvidias guide](https://docs.nvidia.com/isaac/isaac/doc/tutorials/building_apps.html)
+5. Follow [Nvidias guide](https://docs.nvidia.com/isaac/isaac/doc/tutorials/building_apps.html)
  to build your own applications.
 
-Once any of the applications are running you can start the robot program with loaded
-URCap. From that moment on the robot is fully functional. You can make use of the
-Pause function or even Stop the program. Simply press the Play button
+Once any of the applications are running you can start the robot program with the
+loaded URCap. From that moment on the robot is fully functional. You can make use
+of the Pause function or even Stop the program. Simply press the Play button
 again and the ISAAC driver will reconnect.
 
 Inside the Application terminal running the driver you should see the output `Robot

@@ -24,12 +24,22 @@ together with other components from this repository.
 
 ### Subgraph
 
-This driver comes with 2 subgraphs, which sets up all the nescarry parts to use the
-driver in an application.
+This driver comes with 7 subgraphs, one for each robot model. They set up all
+the nescarry parts to use the driver in an application.
 
-- One subgraph for the [e-series robots](apps/ur_eseries_robot.subgraph.json)
+- Subgraph for the [ur3](apps/ur3.subgraph.json)
 
-- One subgraph for the [cb3 robots](apps/ur_cb3_robot.subgraph.json)
+- Subgraph for the [ur5](apps/ur5.subgraph.json)
+
+- Subgraph for the [ur10](apps/ur10.subgraph.json)
+
+- Subgraph for the [ur3e](apps/ur3e.subgraph.json)
+
+- Subgraph for the [ur5e](apps/ur5e.subgraph.json)
+
+- Subgraph for the [ur10e](apps/ur10e.subgraph.json)
+
+- Subgraph for the [ur16e](apps/ur16e.subgraph.json)
 
 These subgraphs integrates
 [UniversalRobots](UniversalRobots.hpp), [DashboardClientIsaac](DashboardClientIsaac.hpp)
@@ -60,19 +70,32 @@ components. The subgraphs provides the following interface edges:
 
 - **trajectory_executed_succesfully(output)**: "subgraph/interface/trajectory_executed_succesfully"
 
-### Kinematic tree
+### Kinematic trees
 
 Isaac SDK uses [kinematic trees](https://docs.nvidia.com/isaac/isaac/doc/manipulation/kinematics.html)
-to represent robot arms inside Isaac application. Currently there is only a kinematic
-tree representation of a UR10 robot. It can be found in Isaac SDK folder in
-`"apps/assets/kinematic_trees/ur_10.kinematic.json"`.
+to represent robot arms inside Isaac applications. There is a kinematic tree file
+for all robot models
 
-When using [MultiJointLqrPlanner](https://docs.nvidia.com/isaac/isaac/doc/doc/component_api.html#isaac-planner-multijointplanner)
-all calculation are done in the joint space, meaning no kinematics calculation are
-applied. Then it's fine to use this file for all UR robot sizes.
+- Kinematic tree file for the [ur3](config/ur3.kinematic.json)
 
-It is recommended to update the kinematic file before applying forward or inverse
-kinematics calculation.
+- Kinematic tree file for the [ur5](config/ur5.kinematic.json)
+
+- Kinematic tree file for the [ur10](config/ur10.kinematic.json)
+
+- Kinematic tree file for the [ur3e](config/ur3e.kinematic.json)
+
+- Kinematic tree file for the [ur5e](config/ur5e.kinematic.json)
+
+- Kinematic tree file for the [ur10e](config/ur10e.kinematic.json)
+
+- Kinematic tree file for the [ur16e](config/ur16e.kinematic.json)
+
+**NOTE** All the kinematic tree files assumes that no gripper is connected to the
+robot. If the robot is to be used with a gripper, the kinematic tree file can be
+extended, with the gripper kinematics. For an example on how to do this see the
+kinematic tree file found in `isaac/sdk/apps/assets/kinematic_trees/ur10.kinematic.json`
+it has a vacum gripper connected. Also the application [shuffle box hardware](../apps/shuffle_box_hardware.py)
+can serve as an inspiration on how to control the gripper.
 
 ## Technical details
 

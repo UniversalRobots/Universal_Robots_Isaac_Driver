@@ -1,0 +1,215 @@
+{
+  "modules": [
+    "behavior_tree",
+    "composite"
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "name": "interface",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "subgraph",
+            "type": "isaac::alice::Subgraph"
+          }
+        ]
+      },
+      {
+        "name": "sequence_behavior",
+        "components": [
+          {
+            "name": "NodeGroup",
+            "type": "isaac::behavior_tree::NodeGroup"
+          },
+          {
+            "name": "MemorySequenceBehavior",
+            "type": "isaac::behavior_tree::MemorySequenceBehavior"
+          }
+        ],
+        "disable_automatic_start": true
+      },
+      {
+        "name": "repeat_behavior",
+        "components": [
+          {
+            "name": "NodeGroup",
+            "type": "isaac::behavior_tree::NodeGroup"
+          },
+          {
+            "name": "RepeatBehavior",
+            "type": "isaac::behavior_tree::RepeatBehavior"
+          }
+        ],
+        "disable_automatic_start": true
+      },
+      {
+        "name": "atlas",
+        "components": [
+          {
+            "name": "CompositeAtlas",
+            "type": "isaac::composite::CompositeAtlas"
+          }
+        ]
+      },
+      {
+        "name": "joint_follow_path",
+        "components": [
+          {
+            "name": "ledger",
+            "type": "isaac::alice::MessageLedger"
+          },
+          {
+            "name": "CompositePublisher",
+            "type": "isaac::composite::CompositePublisher"
+          },
+          {
+            "name": "CompositeMetric",
+            "type": "isaac::composite::CompositeMetric"
+          },
+          {
+            "name": "FollowPath",
+            "type": "isaac::composite::FollowPath"
+          }
+        ],
+        "disable_automatic_start": true
+      },
+      {
+        "name": "config_cart_to_dolly",
+        "components": [
+          {
+            "name": "ConfigLoader",
+            "type": "isaac::alice::ConfigLoader"
+          }
+        ],
+        "disable_automatic_start": true
+      },
+      {
+        "name": "config_dolly_to_cart",
+        "components": [
+          {
+            "name": "ConfigLoader",
+            "type": "isaac::alice::ConfigLoader"
+          }
+        ],
+        "disable_automatic_start": true
+      },
+      {
+        "name": "config_dolly_lift",
+        "components": [
+          {
+            "name": "ConfigLoader",
+            "type": "isaac::alice::ConfigLoader"
+          }
+        ],
+        "disable_automatic_start": true
+      },
+      {
+        "name": "config_cart_lift",
+        "components": [
+          {
+            "name": "ConfigLoader",
+            "type": "isaac::alice::ConfigLoader"
+          }
+        ],
+        "disable_automatic_start": true
+      }
+    ],
+    "edges": [
+      {
+        "source": "joint_follow_path/CompositePublisher/path",
+        "target": "joint_follow_path/FollowPath/path"
+      },
+      {
+        "source": "joint_follow_path/FollowPath/goal",
+        "target": "interface/subgraph/joint_target"
+      },
+      {
+        "source": "interface/subgraph/joint_state",
+        "target": "joint_follow_path/FollowPath/state"
+      }
+    ]
+  },
+  "config": {
+    "sequence_behavior": {
+      "NodeGroup": {
+        "node_names": [
+          "$(fullname config_cart_lift)",
+          "$(fullname joint_follow_path)",
+          "$(fullname config_cart_to_dolly)",
+          "$(fullname joint_follow_path)",
+          "$(fullname config_dolly_lift)",
+          "$(fullname joint_follow_path)",
+          "$(fullname config_dolly_to_cart)",
+          "$(fullname joint_follow_path)"
+        ]
+      }
+    },
+    "repeat_behavior": {
+      "NodeGroup": {
+        "node_names": [
+          "$(fullname sequence_behavior)"
+        ]
+      }
+    },
+    "joint_follow_path": {
+      "CompositePublisher": {
+        "tick_period": "30Hz",
+        "atlas": "$(fullname atlas/CompositeAtlas)",
+        "report_success": true
+      },
+      "FollowPath": {
+        "tick_period": "10Hz",
+        "wait_time": 1.0,
+        "tolerance": 0.1
+      }
+    },
+    "config_cart_lift": {
+      "ConfigLoader": {
+        "config": {
+          "behavior.joint_follow_path": {
+            "CompositePublisher": {
+              "path": ["cart_observe", "cart_align", "cart_dropoff"]
+            }
+          }
+        }
+      }
+    },
+    "config_dolly_lift": {
+      "ConfigLoader": {
+        "config": {
+          "behavior.joint_follow_path": {
+            "CompositePublisher": {
+              "path": ["dolly_observe", "dolly_align", "dolly_dropoff"]
+            }
+          }
+        }
+      }
+    },
+    "config_cart_to_dolly": {
+      "ConfigLoader": {
+        "config": {
+          "behavior.joint_follow_path": {
+            "CompositePublisher": {
+              "path": ["cart_align", "cart_observe", "dolly_observe", "dolly_align", "dolly_dropoff"]
+            }
+          }
+        }
+      }
+    },
+    "config_dolly_to_cart": {
+      "ConfigLoader": {
+        "config": {
+          "behavior.joint_follow_path": {
+            "CompositePublisher": {
+              "path": ["dolly_align", "dolly_observe", "cart_observe", "cart_align", "cart_dropoff"]
+            }
+          }
+        }
+      }
+    }
+  }
+}
