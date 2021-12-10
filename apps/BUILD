@@ -11,12 +11,26 @@ isaac_subgraph(
     visibility = ["//visibility:public"],
 )
 
+isaac_subgraph(
+    name = "predefined_waypoint_movement_subgraph",
+    modules = [
+        "behavior_tree",
+        "composite",
+    ],
+    subgraph = "predefined_waypoint_movement.subgraph.json",
+    visibility = ["//visibility:public"],
+)
+
 isaac_jupyter_app(
     name = "simple_joint_control",
     data = [
-        "//apps/assets/kinematic_trees",
-        "//packages/universal_robots/ur_robot_driver/apps:ur_eseries_robot_subgraph",
-        "//packages/universal_robots/ur_robot_driver/apps:ur_cb3_robot_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur3_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur5_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur10_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur3e_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur5e_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur10e_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur16e_subgraph",
     ],
     modules = [
         "sight",
@@ -32,8 +46,31 @@ isaac_py_app(
     data = [
         "//apps/assets/kinematic_trees",
         "//packages/universal_robots/apps:shuffle_box_behavior_hardware_subgraph",
-        "//packages/universal_robots/ur_robot_driver/apps:ur_eseries_robot_subgraph",
-        "//packages/universal_robots/ur_robot_driver/apps:ur_cb3_robot_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur10_subgraph"
+    ],
+    modules = [
+        "behavior_tree",
+        "planner",
+        "sight",
+        "universal_robots",
+    ],
+    deps = [
+        "//packages/pyalice",
+    ],
+)
+
+isaac_py_app(
+    name = "predefined_waypoint_movement",
+    srcs = ["predefined_waypoint_movement.py"],
+    data = [
+        "//packages/universal_robots/apps:predefined_waypoint_movement_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur3_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur5_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur10_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur3e_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur5e_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur10e_subgraph",
+        "//packages/universal_robots/ur_robot_driver/apps:ur16e_subgraph",
     ],
     modules = [
         "behavior_tree",

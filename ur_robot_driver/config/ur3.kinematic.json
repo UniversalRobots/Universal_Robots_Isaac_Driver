@@ -1,0 +1,171 @@
+{
+  "links": [
+    {
+      "name" : "axis1",
+      "motor": {
+        "type": "constant",
+        "properties": {
+          "pose": {
+            "translation": [0, 0.0, 0.1519],
+            "rotation": {
+              "roll_radians": 0,
+              "pitch_radians": 0,
+              "yaw_radians": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name" : "shoulder_pan_joint",
+      "parent": "axis1",
+      "motor": {
+        "type": "revolute",
+        "properties": {
+          "axis": [0, 0, 1],
+          "limits": [-6.28, 6.28]
+        }
+      }
+    },
+    {
+      "name" : "axis2",
+      "parent": "shoulder_pan_joint",
+      "motor": {
+        "type": "constant",
+        "properties": {
+          "pose": {
+            "translation": [0.0, 0.0, 0.0],
+            "rotation": {
+              "roll_radians": 1.570796327,
+              "pitch_radians": 0,
+              "yaw_radians": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name" : "shoulder_lift_joint",
+      "parent": "axis2",
+      "motor": {
+        "type": "revolute",
+        "properties": {
+          "axis": [0, 0, 1],
+          "limits": [-6.28, 6.28]
+        }
+      }
+    },
+    {
+      "name" : "axis3",
+      "parent": "shoulder_lift_joint",
+      "motor": {
+        "type": "constant",
+        "properties": {
+          "pose": {
+            "translation": [-0.24365, 0.0, 0.0],
+            "rotation": {
+              "roll_radians": 0,
+              "pitch_radians": 0,
+              "yaw_radians": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name" : "elbow_joint",
+      "parent": "axis3",
+      "motor": {
+        "type": "revolute",
+        "properties": {
+          "axis": [0, 0, 1],
+          "limits": [-3.14, 3.14]
+        }
+      }
+    },
+    {
+      "name" : "axis4",
+      "parent": "elbow_joint",
+      "motor": {
+        "type": "constant",
+        "properties": {
+          "pose": {
+            "translation": [-0.21325, 0.0, 0.11235],
+            "rotation": {
+              "roll_radians": 0,
+              "pitch_radians": 0,
+              "yaw_radians": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name" : "wrist_1_joint",
+      "parent": "axis4",
+      "motor": {
+        "type": "revolute",
+        "properties": {
+          "axis": [0, 0, 1],
+          "limits": [-6.28, 6.28]
+        }
+      }
+    },
+    {
+      "name" : "axis5",
+      "parent": "wrist_1_joint",
+      "motor": {
+        "type": "constant",
+        "properties": {
+          "pose": {
+            "translation": [0.0, -0.08535, -1.750557762378351e-11],
+            "rotation": {
+              "roll_radians": 1.570796327,
+              "pitch_radians":  0,
+              "yaw_radians": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name" : "wrist_2_joint",
+      "parent": "axis5",
+      "motor": {
+        "type": "revolute",
+        "properties": {
+          "axis": [0, 0, 1],
+          "limits": [-6.28, 6.28]
+        }
+      }
+    },
+    {
+      "name" : "axis6",
+      "parent": "wrist_2_joint",
+      "motor": {
+        "type": "constant",
+        "properties": {
+          "pose": {
+            "translation": [0.0, 0.0819, -1.679797079540562e-11],
+            "rotation": {
+              "roll_radians": -1.570796326589793,
+              "pitch_radians": 0,
+              "yaw_radians": 0
+            }
+          }
+        }
+      }
+    },
+    {
+      "name" : "wrist_3_joint",
+      "parent": "axis6",
+      "motor": {
+        "type": "revolute",
+        "properties": {
+          "axis": [0, 0, 1],
+          "limits": [-6.28, 6.28]
+        }
+      }
+    }
+  ]
+}
